@@ -1,2 +1,7 @@
 # exclude data dir
 data/*
+.ipynb_checkpoints/*
+__pycache__/*
+lib/*
+bin/*
+.cache-a2la4jzttvnov9au11hwf56z8
