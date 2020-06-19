@@ -6,6 +6,6 @@ lib/*
 bin/*
 .cache-a2la4jzttvnov9au11hwf56z8
 /notebooks/client_secret.py
-/notebooks/client_secret.pyc
+*.pyc
 /notebooks/.ipynb_checkpoints/*
 /notebooks/__pycache__/*

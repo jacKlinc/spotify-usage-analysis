@@ -16,7 +16,7 @@ from scrapy.crawler import CrawlerProcess
 #   - Using the console you can copy the XPath by clicking on it
 #   - ethnic: /html/body/div/div/div/div/div/section/div[2]/article/div/div[2]/div[1]/p[4]/strong
 
-class RedditSpider(scrapy.Spider):
+class EthnicCelebSpider(scrapy.Spider):
     """Scrapes example web page using CSS selector"""
     name = "ethnic_celebs"
     start_urls = [
@@ -24,34 +24,13 @@ class RedditSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
-        """Loop through page for post title, data and author"""
-        # Writes to JSON file
-        # page = response.url.split('/')
-        # filename = 'posts-%s.json' % page
-        # with open(filename, 'wb') as file:
-        #     file.write(response.body)
-        # for post in response.css('div.post-item'): 
-            
-        #     # yield is like return
-        #     yield {
-        #         # Gets title, date and author
-        #         'title': post.css('.post-header h2 a::text')[0].get(),
-        #         'date': post.css('.post-header a::text')[1].get(),
-        #         'author': post.css('.post-header a::text')[2].get()
-        #     }
-        # Gets link of class
+        """Get artist race"""     
         next_page = response.xpath('/html/body/div/div/div/div/div/section/div[2]/article/div/div[2]/div[1]/p[4]/strong/text()').get()
-        # Checks if not None
-        #page = response.url.split('/')
-        filename = 'posts-%s.json' % next_page
-            
-        if next_page is not None:
-            next_page = response.urljoin(next_page)
-            # print(next_page)
-            with open(filename, 'wb') as file:
-                file.write(response.body)
+        # Find word and exclude
+        string_start = next_page.find("Ethnicity: ") + len("Ethnicity: ")
+        race = next_page[string_start:len(next_page)]
         
-            yield scrapy.Request(next_page, callback=self.parse)
-
+        print('\n'+race+'\n')
+        return race
 
 
