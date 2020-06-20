@@ -1,18 +1,30 @@
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
-class EthnicCelebSpider(scrapy.Spider):
-    """Scrapes example ethnic celebs website using XPath selector"""
-    name = "ethnic_celebs"
+## Check the domain/robots.txt which defines the limitations of scraping
 
-    def __init__(self, artist='', **kwargs):
-        """Takes artist as an argument when called"""
-        # Replaces spaces with "-" for website
-        artist = artist.replace(" ", "-")
-        self.start_urls = [f'https://ethnicelebs.com/{artist}']
+## ScraPy Shell
+#   - Navigate to root scrapy project
+#   - scrapy shell myUrl
+#   - response.css('h2::text').get(): returns first h2 element on page
+#   - response.css('.post-header').get(): returns first instance of class on page
+#   - response.css('.post-header a::text').get(): returns first instance of class on page
+#   - response.css('p::text').re(r'scraping'): finds RegEx in paragraph element
+
+## Using XPath
+#   - response.xpath('//h3/text()').getall(): returns all h2s
+#   - Using the console you can copy the XPath by clicking on it
+#   - ethnic: /html/body/div/div/div/div/div/section/div[2]/article/div/div[2]/div[1]/p[4]/strong
+
+class EthnicCelebSpider(scrapy.Spider):
+    """Scrapes example web page using CSS selector"""
+    name = "ethnic_celebs"
+    start_urls = [
+        'https://ethnicelebs.com/21-savage'
+    ]
 
     def parse(self, response):
-        """Get artist race"""    
+        """Get artist race"""     
         next_page = response.xpath('/html/body/div/div/div/div/div/section/div[2]/article/div/div[2]/div[1]/p[4]/strong/text()').get()
         # Find word and exclude
         string_start = next_page.find("Ethnicity: ") + len("Ethnicity: ")
