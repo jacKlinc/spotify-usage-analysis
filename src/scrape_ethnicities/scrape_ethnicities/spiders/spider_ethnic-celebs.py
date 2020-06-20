@@ -22,3 +22,11 @@ class EthnicCelebSpider(scrapy.Spider):
         return race
 
 
+# Setup scraper
+process = CrawlerProcess({
+    'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+})
+
+# Instantiate class
+process.crawl(EthnicCelebSpider, artist='21 savage')
+process.start()
