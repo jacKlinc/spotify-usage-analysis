@@ -9,3 +9,4 @@ bin/*
 *.pyc
 /notebooks/.ipynb_checkpoints/*
 /notebooks/__pycache__/*
+src/client_secret.py
