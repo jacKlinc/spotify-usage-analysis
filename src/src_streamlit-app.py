@@ -8,52 +8,47 @@ import numpy as np
 import os
 from client_secret import *
 
+def make_df(response):
+    """Pass results from Spotfy API call and return cleaned DataFrame"""
+    items = pd.DataFrame(response['items'])
+    # Drop unnecessary columns
+    items = items.drop(['external_urls', 'href', 'id', 'images', 'uri'], axis=1)
+    # Followes column needs cleaning
+    for i in range(0, len(items)):
+        items.followers[i] = items.followers[i]['total']
+
+    items = items.sort_values(by='popularity', ascending=False)
+    return items
+
+def spotify_connect(user_scope, redirect_uri, artist_limit, time_range):
+    """Connects to Spotify API, returning user's top artists"""
+    
+    # Load in secret keys
+    client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+    client = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+    # Create security token
+    security_token = util.prompt_for_user_token(username, user_scope, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
+    
+    # Gets favourite artists 
+    if security_token:
+        spotify_client = spotipy.Spotify(auth=security_token)
+        spotify_client.trace = False
+        # Loop through time ranges
+        for r in time_range:
+            results = spotify_client.current_user_top_artists(time_range=r, limit=artist_limit)
+        return results
+    
+
 scope = "user-top-read"
 redirect_uri = "http://localhost:8080"
 
-# Load in secret keys
-client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+# Get top 10 artists for short, medium and long term
+results = spotify_connect(scope, redirect_uri, 10, ['short_term', 'medium_term', 'long_term'])
 
-# Create security token
-token = util.prompt_for_user_token(username, scope, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
-
-# Gets favourite artists 
-if token:
-    sp = spotipy.Spotify(auth=token)
-    sp.trace = False
-    ranges = ['short_term', 'medium_term', 'long_term']
-    for r in ranges:
-        # Limited to 50 artists over all time ranges
-        results = sp.current_user_top_artists(time_range=r, limit=50)
-
-# Add to DataFrame
-name=[]
-popularity=[]
-genres=[]
-followers=[]
-
-for artist in results['items']:
-    if len(artist['genres']) > 0:
-        # Append each to list
-        name.append(artist['name'])
-        popularity.append(artist['popularity'])
-        followers.append(artist['followers']['total'])
-        
-        # Adds genres in CSV
-        csv_genre=''
-        for genre in artist['genres']:
-            csv_genre+=genre+','
-        genres.append(csv_genre)
-
-# Add list to DataFrame
-artists = pd.DataFrame()
-artists['name'] = name
-artists['popularity'] = popularity
-artists['followers'] = followers
-artists['genre'] = genres
-
-artists = artists.sort_values(by='popularity', ascending=False)
+# Make DataFrame    
+artists = make_df(results)
+artists.head()
 
 ### Title 
 st.title("Jack's Spotify Listening")
