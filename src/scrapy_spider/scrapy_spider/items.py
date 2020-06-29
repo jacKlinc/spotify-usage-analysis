@@ -8,7 +8,7 @@
 import scrapy
 
 
-class ScrapeEthnicitiesItem(scrapy.Item):
+class ScrapySpiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass

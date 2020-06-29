@@ -7,7 +7,36 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from client_secret import *
+import requests
+from bs4 import BeautifulSoup as bs4
 
+@st.cache
+def scrape_race(artist_name):
+    """Get race of artist through web scraping"""
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'}
+    base_url = "https://ethnicelebs.com/"
+    
+    # Parsed artists name
+    parse_name = artist_name.replace(" ", "-")
+    req = requests.get(base_url+parse_name, headers=headers)
+    soup = bs4(req.content, "html.parser")
+
+    # Find all <p> elements
+    para = str(soup.find_all('p'))
+
+    # Find range of string
+    string_start = para.find("Ethnicity: ") + len("Ethnicity: ")
+    string_end = para.find("</strong")
+    race = para[string_start:string_end]
+
+    if len(race) < 100:
+        if 'Africa' in race:
+            return 'Black'
+    else:
+        return 'Unknown'
+
+
+@st.cache
 def make_df(response):
     """Pass results from Spotfy API call and return cleaned DataFrame"""
     items = pd.DataFrame(response['items'])
@@ -17,9 +46,10 @@ def make_df(response):
     for i in range(0, len(items)):
         items.followers[i] = items.followers[i]['total']
 
-    items = items.sort_values(by='popularity', ascending=False)
-    return items
+    # Sort by popularity
+    return items.sort_values(by='popularity', ascending=False)
 
+@st.cache
 def spotify_connect(user_scope, redirect_uri, artist_limit, time_range):
     """Connects to Spotify API, returning user's top artists"""
     
@@ -37,8 +67,7 @@ def spotify_connect(user_scope, redirect_uri, artist_limit, time_range):
         # Loop through time ranges
         for r in time_range:
             results = spotify_client.current_user_top_artists(time_range=r, limit=artist_limit)
-        return results
-    
+        return results 
 
 scope = "user-top-read"
 redirect_uri = "http://localhost:8080"
@@ -48,7 +77,6 @@ results = spotify_connect(scope, redirect_uri, 10, ['short_term', 'medium_term',
 
 # Make DataFrame    
 artists = make_df(results)
-artists.head()
 
 ### Title 
 st.title("Jack's Spotify Listening")
@@ -56,24 +84,20 @@ st.title("Jack's Spotify Listening")
 st.markdown("""This is where I can write 
     my **description** in Markdown.""")
 
-code = '''def hello():
-   print("Hello, Streamlit!")'''
-st.code(code, language='python')
-
-### Description
-st.markdown('# My Spotify App')
-
-### Show head 
+# Show head
 st.write('## Spotify Artists DataFrame')
-st.write(artists.head(5))
+st.write(artists.head(10))
 
-### Plot Favourite Artists
+# Plot Favourite Artists
 st.write('## Plot Favourite Artists')
 
-# st.bar_chart(artists)
-st.bar_chart(artists.name.sort_values(ascending=False), width=50)
-
-fig, ax = plt.subplots(figsize=(15,20))
+fig, ax = plt.subplots(figsize=(15,5))
 ax.barh(artists.name, artists.popularity)
 
 st.pyplot()
+
+races = []
+for artist in artists.name:
+    races.append(scrape_race(artist))
+
+st.write(races)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for scrape_ethnicities project
+# Scrapy settings for scrapy_spider project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,14 +9,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'scrape_ethnicities'
+BOT_NAME = 'scrapy_spider'
 
-SPIDER_MODULES = ['scrape_ethnicities.spiders']
-NEWSPIDER_MODULE = 'scrape_ethnicities.spiders'
+SPIDER_MODULES = ['scrapy_spider.spiders']
+NEWSPIDER_MODULE = 'scrapy_spider.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'scrape_ethnicities (+http://www.yourdomain.com)'
+#USER_AGENT = 'scrapy_spider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -47,13 +47,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'scrape_ethnicities.middlewares.ScrapeEthnicitiesSpiderMiddleware': 543,
+#    'scrapy_spider.middlewares.ScrapySpiderSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'scrape_ethnicities.middlewares.ScrapeEthnicitiesDownloaderMiddleware': 543,
+#    'scrapy_spider.middlewares.ScrapySpiderDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -65,7 +65,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'scrape_ethnicities.pipelines.ScrapeEthnicitiesPipeline': 300,
+#    'scrapy_spider.pipelines.ScrapySpiderPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
