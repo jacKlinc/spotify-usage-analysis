@@ -1,12 +1,15 @@
 # exclude data dir
 data/*
-.ipynb_checkpoints/*
-__pycache__/*
-lib/*
-bin/*
+.ipynb_checkpoints/
+.vscode/
+__pycache__/
+lib/
+bin/
 .cache-a2la4jzttvnov9au11hwf56z8
 /notebooks/client_secret.py
 *.pyc
 /notebooks/.ipynb_checkpoints/*
 /notebooks/__pycache__/*
-src/client_secret.py
+/src/client_secret.py
+pyvenv.cfg
+.gitignore
