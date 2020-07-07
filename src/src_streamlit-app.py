@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from client_secret import *
-import requests
-from bs4 import BeautifulSoup as bs4
+# import requests
+# from bs4 import BeautifulSoup as bs4
 
 @st.cache
 def scrape_race(artist_name):
@@ -34,7 +34,6 @@ def scrape_race(artist_name):
             return 'Black'
     else:
         return 'Unknown'
-
 
 @st.cache
 def make_df(response):
@@ -78,26 +77,71 @@ results = spotify_connect(scope, redirect_uri, 10, ['short_term', 'medium_term',
 # Make DataFrame    
 artists = make_df(results)
 
-### Title 
-st.title("Jack's Spotify Listening")
+# Read in cached artist information
+my_top50_artist_country = pd.read_json('../data/mytop50_artists.json')
+top500_artist_country = pd.read_json('../data/top500_spotify_artists.json')
 
-st.markdown("""This is where I can write 
-    my **description** in Markdown.""")
+
+### Title 
+st.title("[names]'s Spotify Listening")
+
+'This is a peek at your listening trends'
 
 # Show head
-st.write('## Spotify Artists DataFrame')
-st.write(artists.head(10))
+# st.write('## Spotify Artists DataFrame')
+# st.write(artists.head(10))
 
 # Plot Favourite Artists
-st.write('## Plot Favourite Artists')
+st.write('# Your Top 5')
 
-fig, ax = plt.subplots(figsize=(15,5))
-ax.barh(artists.name, artists.popularity)
-
+fig, ax = plt.subplots(figsize=(15,8))
+ax.barh(artists.name.head(), artists.popularity.head())
 st.pyplot()
 
-races = []
-for artist in artists.name:
-    races.append(scrape_race(artist))
+# Top artist
+artists.head(1).name.iloc[0]+' has the lead'
 
-st.write(races)
+# races = []
+# for artist in artists.name:
+#     races.append(scrape_race(artist))
+
+# st.write(races)
+
+# Plot nationalities
+st.write("# Where They're from")
+
+
+# Group artists into countries and sort
+countries_group = my_top50_artist_country.groupby('country').artist.count().sort_values(ascending=False)
+
+fig, ax = plt.subplots(figsize=(15,8))
+ax.bar(countries_group.index, countries_group)
+st.pyplot()
+
+countries_group.index[0], ' has the lead'
+
+# Plot ages
+st.write("# Age?")
+'Here are your favourite age groups'
+
+# Remove 'n/a'
+cleaned_df = my_top50_artist_country.loc[my_top50_artist_country.age != 'n/a']
+
+# Define age groups
+bins= [0,15,24,35,50,110]
+labels = ['0-15', '16-24', '25-35', '36-50', '50+']
+cleaned_df['AgeGroup'] = pd.cut(cleaned_df['age'], bins=bins, labels=labels, right=False)
+
+cleaned_df = cleaned_df.sort_values(by='age')
+
+fig, ax = plt.subplots(figsize=(12,5))
+ax.bar(cleaned_df['AgeGroup'], cleaned_df.index)
+st.pyplot()
+
+cleaned_df['AgeGroup'].max(), ' is in the lead'
+
+
+### Plot genres
+st.write("# Genres")
+
+'You like', cleaned_df['AgeGroup'].max(), ' from',  countries_group.index[0],' in [genre]'
