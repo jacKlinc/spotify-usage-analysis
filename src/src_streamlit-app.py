@@ -67,7 +67,10 @@ def spotify_connect(user_scope, redirect_uri, artist_limit, time_range):
         # Loop through time ranges
         for r in time_range:
             results = spotify_client.current_user_top_artists(time_range=r, limit=artist_limit)
-        return results 
+            user = spotify_client.current_user()
+            if 'display_name' in user:
+                name = user['display_name']
+        return results, name
 
 ## Grouping plot functions
 def get_country_groups(top50_df):
@@ -142,7 +145,7 @@ scope = "user-top-read"
 redirect_uri = "http://localhost:8080"
 
 # Get top 10 artists for short, medium and long term
-results = spotify_connect(scope, redirect_uri, 50, ['short_term', 'medium_term', 'long_term'])
+results, name = spotify_connect(scope, redirect_uri, 100, ['short_term', 'medium_term', 'long_term'])
 
 # Make DataFrame    
 artists = make_df(results)
@@ -153,7 +156,7 @@ top500_artist_country = pd.read_json('../data/top500_spotify_artists.json')
 
 
 # Title 
-st.title("[names]'s Spotify Listening")
+name, "'s Spotify Listening"
 'This is a peek at your listening trends'
 
 # Plot Favourite Artists
