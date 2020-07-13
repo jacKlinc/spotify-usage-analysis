@@ -1,0 +1,14 @@
+data/
+.ipynb_checkpoints/
+.vscode/
+__pycache__/
+lib/
+bin/
+.cache-a2la4jzttvnov9au11hwf56z8
+notebooks/client_secret.py
+*.pyc
+/notebooks/.ipynb_checkpoints/
+/notebooks/__pycache__/
+src/client_secret.py
+*.cfg
+.gitignore
