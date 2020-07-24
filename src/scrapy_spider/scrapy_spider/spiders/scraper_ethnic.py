@@ -3,22 +3,6 @@ import scrapy
 from scrapy.crawler import CrawlerProcess
 
 
-# class EthnicScraperSpider(scrapy.Spider):
-#     name = 'ethnic-scraper'
-#     allowed_domains = ['ethnicelebs.com']
-#     start_urls = ['http://ethnicelebs.com/21-savage']
-
-#     def parse(self, response):
-#         next_page = response.xpath('/html/body/div/div/div/div/div/section/div[2]/article/div/div[2]/div[1]/p[4]/strong/text()').get()
-#         # Find word and exclude
-#         string_start = next_page.find("Ethnicity: ") + len("Ethnicity: ")
-#         race = next_page[string_start:len(next_page)]
-        
-
-#         yield {
-#             'race': race
-#         } 
-
 class EthnicScraperSpider(scrapy.Spider):
     """Scrapes ethnic celebs website using XPath selector"""
     name = 'ethnic-scraper'

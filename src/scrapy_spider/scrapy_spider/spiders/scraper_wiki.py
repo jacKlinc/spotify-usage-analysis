@@ -2,7 +2,7 @@ import scrapy
 from scrapy.crawler import CrawlerProcess
 
 class WikiSpider(scrapy.Spider):
-    """Scrapes Wikipedia using CSS selector"""
+    """This Spider will find the country of origin and the age of the artist using CSS selector"""
     name = "wiki"
     allowed_domains = ['wikipedia.org'] 
     start_urls = ['https://wikipedia.org/wiki/']
