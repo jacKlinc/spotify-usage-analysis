@@ -152,7 +152,7 @@ artists = make_df(results)
 
 # Read in cached artist information
 my_top50_artist_country = pd.read_json('../data/mytop50_artists.json')
-top500_artist_country = pd.read_json('../data/top10k_spotify_artists.json')
+top500_artist_country = pd.read_json('../data/top500_spotify_artists.json')
 
 
 # Title 
@@ -160,17 +160,17 @@ name, "'s Spotify Listening"
 'This is a peek at your listening trends'
 
 # Plot Favourite Artists
-'# Your Top 5'
+st.write('# Your Top 5')
 
 fig, ax = plt.subplots(figsize=(15,8))
 ax.barh(artists.name.head(), artists.popularity.head())
 st.pyplot()
 
 # Top artist
-artists.name.iloc[0]+' has the lead'
+artists.head(1).name.iloc[0]+' has the lead'
 
 # Plot nationalities
-"# Where They're from"
+st.write("# Where They're from")
 
 # Group artists into countries and sort
 countries_group = my_top50_artist_country.groupby('country').artist.count().sort_values(ascending=False)
@@ -182,7 +182,7 @@ st.pyplot()
 countries_group.index[0], ' has the lead'
 
 # Plot ages
-"# Age?"
+st.write("# Age?")
 'Here are your favourite age groups'
 
 age_groups = get_age_groups(my_top50_artist_country)
@@ -195,11 +195,11 @@ age_groups.max(), ' is in the lead'
 
 
 ### Plot genres
-"# Genres"
+st.write("# Genres")
 
 genres = get_genres(artists)
 
-fig, ax = plt.subplots(figsize=(12,5))
+fig, ax = plt.subplots(figsize=(14,4))
 ax.bar(genres.keys(), genres.values())
 st.pyplot()
 
