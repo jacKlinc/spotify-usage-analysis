@@ -21,7 +21,7 @@ only letting me search for an artist once a second.
 
 ## Streamlit App
 After analysing and graphing the data in Jupyter, the visualisations will be 
-added to a dashboard for the user to see their favourite artists.
+added to a dashboard for the user to see their favourite artists. Available [here](https://spotify-reco.herokuapp.com/).
 
 - The contents and layout are yet to be designed
 - Recommendations for new artists could be added too
