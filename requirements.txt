@@ -95,7 +95,7 @@ Protego==0.1.16
 protobuf==3.6.1
 psutil==5.5.1
 ptyprocess==0.6.0
-py==1.8.1
+py==1.10.0
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
 pycairo==1.16.2
